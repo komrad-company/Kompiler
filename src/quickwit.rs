@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 
 #[derive(Debug, Deserialize)]
 pub struct SearchResponse {
@@ -22,16 +22,20 @@ impl QuickwitClient {
     }
 
     // Recherche via l'API native Quickwit
-    pub async fn search(&self, index: &str, query: &str, max_hits: u64)
-        -> anyhow::Result<SearchResponse>
-    {
+    pub async fn search(
+        &self,
+        index: &str,
+        query: &str,
+        max_hits: u64,
+    ) -> anyhow::Result<SearchResponse> {
         let url = format!("{}/api/v1/{}/search", self.base_url, index);
         let body = json!({
             "query": query,
             "max_hits": max_hits,
         });
 
-        let resp = self.http
+        let resp = self
+            .http
             .post(&url)
             .json(&body)
             .send()
@@ -42,5 +46,4 @@ impl QuickwitClient {
 
         Ok(resp)
     }
-
 }
