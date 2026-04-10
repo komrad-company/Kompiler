@@ -1,0 +1,4 @@
+{
+    "quickwit_url": "http://quickwit.korelator.org",
+    "rules_path": "/etc/korelator/rules"
+}
