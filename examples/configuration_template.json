@@ -1,3 +1,4 @@
 {
-    "quickwit_url": "http://quickwit.wampixel.org"
+    "quickwit_url": "http://quickwit.korelator.org",
+    "rules_path": "/etc/korelator/rules"
 }
