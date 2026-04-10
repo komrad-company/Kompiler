@@ -1,6 +1,8 @@
 use serde::Deserialize;
 use serde_json::{Value, json};
 
+use crate::InternalResult;
+
 #[derive(Debug, Deserialize)]
 pub struct SearchResponse {
     pub hits: Vec<Value>,
@@ -27,7 +29,7 @@ impl QuickwitClient {
         index: &str,
         query: &str,
         max_hits: u64,
-    ) -> anyhow::Result<SearchResponse> {
+    ) -> InternalResult<SearchResponse> {
         let url = format!("{}/api/v1/{}/search", self.base_url, index);
         let body = json!({
             "query": query,

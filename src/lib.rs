@@ -1,9 +1,12 @@
-use std::{env, fmt::Display, fs::File, io::BufReader};
+use std::{env, error::Error, fmt::Display, fs::File, io::BufReader};
 
 use serde_json::from_reader;
 
 pub mod configuration;
 pub mod quickwit;
+pub mod rules;
+
+pub type InternalResult<T> = Result<T, Box<dyn Error>>;
 
 pub fn the_unforgivable_error<E: Display>(error: E, code: i32) -> ! {
     println!("Unforgivable: {}", error);

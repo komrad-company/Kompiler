@@ -1,0 +1,15 @@
+id: "rule-001"
+title: "My Rule"
+level: high
+tags:
+  - "tag1"
+  - "tag2"
+match_type:
+  type: Threshold
+  timeframe_secs: 60
+  aggregate:
+    type: Count
+    threshold: 2
+  group_by:
+    - "user"
+    - "ip"
