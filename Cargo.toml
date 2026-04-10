@@ -15,3 +15,7 @@ serde_json = "1"
 serde_yaml = "0.9.34"
 # HTTP Client
 reqwest = { version = "0.13", features = ["json"] }
+# Loging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+tracing-appender = "0.2"
