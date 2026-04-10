@@ -1,10 +1,14 @@
 use std::path::Path;
 
-use korelator::{InternalResult, load_configuration, quickwit::QuickwitClient, rules};
+use korelator::{
+    InternalResult, load_configuration, quickwit::QuickwitClient, rules, telemetry::intialize,
+};
 
 #[tokio::main]
 async fn main() -> InternalResult<()> {
     let configuration = load_configuration();
+    intialize(configuration.log);
+    tracing::info!("Korelator successfully initiated");
 
     // Test connection with simple request
     let client = QuickwitClient::new(configuration.quickwit_url.as_str());

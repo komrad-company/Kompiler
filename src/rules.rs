@@ -1,16 +1,8 @@
 use serde::Deserialize;
 
-pub mod parser;
+use crate::LogLevel;
 
-#[derive(Debug, Clone, PartialEq, Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum Level {
-    Informational,
-    Low,
-    Medium,
-    High,
-    Critical,
-}
+pub mod parser;
 
 // Matching and aggregations structs
 #[derive(Debug, Clone, Deserialize)]
@@ -34,7 +26,7 @@ pub enum MatchType {
 pub struct Rule {
     pub id: String,
     pub title: String,
-    pub level: Level,
+    pub level: LogLevel,
     pub description: Option<String>,
     pub tags: Option<Vec<String>>,
     pub match_type: MatchType,
