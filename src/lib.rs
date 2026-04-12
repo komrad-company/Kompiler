@@ -1,9 +1,12 @@
-use std::{env, error::Error, fmt::Display, fs::File, io::BufReader};
+use std::{env, error::Error, fs::File, io::BufReader};
 
 use serde::Deserialize;
 use serde_json::from_reader;
 
+use crate::errors::{AppError, UnforgivableErrors};
+
 pub mod configuration;
+pub mod errors;
 pub mod quickwit;
 pub mod rules;
 pub mod telemetry;
@@ -21,17 +24,18 @@ pub enum LogLevel {
     Critical,
 }
 
-pub fn the_unforgivable_error<E: Display>(error: E, code: i32) -> ! {
-    println!("Unforgivable: {}", error);
-    std::process::exit(code)
-}
-
-pub fn load_configuration() -> configuration::Configuration {
+pub fn load_configuration() -> Result<configuration::Configuration, AppError> {
     let configuration_path: String =
         env::var("CONFIGURATION_PATH").unwrap_or_else(|_| "configuration.json".to_string());
 
-    let file = File::open(&configuration_path).unwrap_or_else(|err| the_unforgivable_error(err, 1));
+    let file = File::open(&configuration_path).map_err(|_| {
+        UnforgivableErrors::MissingConfigurationFile {
+            path: configuration_path,
+        }
+    })?;
 
     let reader = BufReader::new(file);
-    from_reader(reader).unwrap_or_else(|err| the_unforgivable_error(err, 1))
+    let conf = from_reader(reader).map_err(UnforgivableErrors::InvalidFormat)?;
+
+    Ok(conf)
 }

@@ -19,3 +19,5 @@ reqwest = { version = "0.13", features = ["json"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 tracing-appender = "0.2"
+# Error management
+thiserror = "2.0.18"

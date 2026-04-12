@@ -1,12 +1,18 @@
 use std::path::Path;
 
 use korelator::{
-    InternalResult, load_configuration, quickwit::QuickwitClient, rules, telemetry::intialize,
+    InternalResult, errors::AppError, load_configuration, quickwit::QuickwitClient, rules,
+    telemetry::intialize,
 };
 
 #[tokio::main]
 async fn main() -> InternalResult<()> {
-    let configuration = load_configuration();
+    let configuration = load_configuration().unwrap_or_else(|err| match err {
+        AppError::ConfigurationError(unforgivable) => {
+            eprintln!("Fatal Error: {unforgivable}");
+            std::process::exit(1)
+        }
+    });
     intialize(configuration.log);
     tracing::info!("Korelator successfully initiated");
 
