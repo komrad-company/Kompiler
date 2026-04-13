@@ -25,3 +25,6 @@ configuration.json
 
 # Added by cargo
 /target
+
+# Local output
+output/

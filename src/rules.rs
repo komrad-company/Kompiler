@@ -1,0 +1,37 @@
+use serde::Deserialize;
+
+use crate::LogLevel;
+
+pub mod parser;
+
+// Matching and aggregations structs
+#[derive(Debug, Clone, Deserialize)]
+#[serde(tag = "type")]
+pub enum AggregationType {
+    Count { threshold: u8 },
+}
+#[derive(Debug, Clone, Deserialize)]
+#[serde(tag = "type")]
+pub enum MatchType {
+    Single, // Stateless, immediate match
+    Threshold {
+        timeframe_secs: u16,
+        aggregate: AggregationType,
+        group_by: Vec<String>,
+    },
+}
+
+#[derive(Debug, Clone, Deserialize)]
+#[serde(tag = "type")]
+pub struct Rule {
+    pub id: String,
+    pub title: String,
+    pub level: LogLevel,
+    pub description: Option<String>,
+    pub tags: Option<Vec<String>>,
+    pub match_type: MatchType,
+    // pub detection: Detection,
+}
+
+#[cfg(test)]
+mod tests;
