@@ -3,7 +3,7 @@ use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitEx
 use crate::configuration::{TelemetryConfiguration, TelemetryOutput};
 
 pub fn intialize(config: TelemetryConfiguration) {
-    let filter = EnvFilter::new("INFO"); // TODO use LogLevel struct
+    let filter = EnvFilter::new(config.level.as_str());
     let registry = tracing_subscriber::registry().with(filter);
 
     let (file, _) = match config.output {
