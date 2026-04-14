@@ -1,18 +1,20 @@
-use std::{fs, io::Error, path::Path};
+use std::{fs, path::Path};
+
+use crate::errors::UnforgivableErrors;
 
 use super::Rule;
 
 // functions
-pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, Error> {
+pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, UnforgivableErrors> {
     let rules = fs::read_dir(path)?
         .flatten()
-        .filter_map(|e| {
-            fs::File::open(e.path())
-                .map_err(|open| eprintln!("Opening {}: {}", e.path().display(), open))
+        .filter_map(|file| {
+            fs::File::open(file.path())
+                .map_err(|e| tracing::warn!("{}, {e}", file.path().display()))
                 .ok()
-                .and_then(|file| {
-                    serde_yaml::from_reader(file)
-                        .map_err(|read| eprintln!("reading {}: {}", e.path().display(), read))
+                .and_then(|rdr| {
+                    serde_yaml::from_reader(rdr)
+                        .map_err(|err| tracing::warn!("{}, {err}", file.path().display()))
                         .ok()
                 })
         })

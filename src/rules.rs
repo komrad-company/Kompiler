@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-use crate::LogLevel;
+use crate::RuleLevel;
 
 pub mod parser;
 
@@ -8,25 +8,24 @@ pub mod parser;
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "type")]
 pub enum AggregationType {
-    Count { threshold: u8 },
+    Count { threshold: u16 },
 }
 #[derive(Debug, Clone, Deserialize)]
 #[serde(tag = "type")]
 pub enum MatchType {
     Single, // Stateless, immediate match
     Threshold {
-        timeframe_secs: u16,
+        timeframe_secs: u32,
         aggregate: AggregationType,
         group_by: Vec<String>,
     },
 }
 
 #[derive(Debug, Clone, Deserialize)]
-#[serde(tag = "type")]
 pub struct Rule {
     pub id: String,
     pub title: String,
-    pub level: LogLevel,
+    pub level: RuleLevel,
     pub description: Option<String>,
     pub tags: Option<Vec<String>>,
     pub match_type: MatchType,

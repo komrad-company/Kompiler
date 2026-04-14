@@ -2,13 +2,8 @@
     "quickwit_url": "http://quickwit.korelator.org",
     "rules_path": "/etc/korelator/rules",
     "log": {
-        "stdout": true,
         "level": "informational",
-        "outputs": [
-            {
-                "type": "File",
-                "path": "output/korelator.log"
-            }
-        ]
+        "file": "output/korelator.log",
+        "remote": "https://telemetry.korelator.org"
     }
 }

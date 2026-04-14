@@ -6,10 +6,6 @@ pub enum UnforgivableErrors {
     InvalidFormat(#[from] serde_json::Error),
     #[error("File not found {path}")]
     MissingConfigurationFile { path: String },
-}
-
-#[derive(Debug, Error)]
-pub enum AppError {
-    #[error("[ConfigurationError] {0}")]
-    ConfigurationError(#[from] UnforgivableErrors),
+    #[error("Invalid rules path {0}")]
+    RulesPathNotFound(#[from] std::io::Error),
 }

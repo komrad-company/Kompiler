@@ -2,12 +2,21 @@ use std::path::PathBuf;
 
 use serde::Deserialize;
 
-use crate::LogLevel;
+use crate::RuleLevel;
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+pub enum TelemetryOutput {
+    Both { file: PathBuf, telemetry: String },
+    File { file: PathBuf },
+    Remote { telemetry: String },
+}
 
 #[derive(Deserialize)]
 pub struct TelemetryConfiguration {
-    pub level: LogLevel,
-    pub file: Option<PathBuf>,
+    pub level: RuleLevel,
+    #[serde(flatten)]
+    pub output: TelemetryOutput,
 }
 #[derive(Deserialize)]
 pub struct Configuration {

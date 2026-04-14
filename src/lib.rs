@@ -3,11 +3,10 @@ use std::{env, error::Error, fs::File, io::BufReader};
 use serde::Deserialize;
 use serde_json::from_reader;
 
-use crate::errors::{AppError, UnforgivableErrors};
+use crate::errors::UnforgivableErrors;
 
 pub mod configuration;
 pub mod errors;
-pub mod quickwit;
 pub mod rules;
 pub mod telemetry;
 
@@ -16,7 +15,7 @@ pub type InternalResult<T> = Result<T, Box<dyn Error>>;
 // Global struct
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(rename_all = "lowercase")]
-pub enum LogLevel {
+pub enum RuleLevel {
     Informational,
     Low,
     Medium,
@@ -24,7 +23,7 @@ pub enum LogLevel {
     Critical,
 }
 
-pub fn load_configuration() -> Result<configuration::Configuration, AppError> {
+pub fn load_configuration() -> Result<configuration::Configuration, UnforgivableErrors> {
     let configuration_path: String =
         env::var("CONFIGURATION_PATH").unwrap_or_else(|_| "configuration.json".to_string());
 

@@ -1,34 +1,25 @@
 use std::path::Path;
 
-use korelator::{
-    InternalResult, errors::AppError, load_configuration, quickwit::QuickwitClient, rules,
-    telemetry::intialize,
-};
+use korelator::{load_configuration, rules::parser, telemetry::intialize};
 
 #[tokio::main]
-async fn main() -> InternalResult<()> {
-    let configuration = load_configuration().unwrap_or_else(|err| match err {
-        AppError::ConfigurationError(unforgivable) => {
-            eprintln!("Fatal Error: {unforgivable}");
-            std::process::exit(1)
-        }
+async fn main() {
+    let configuration = load_configuration().unwrap_or_else(|err| {
+        eprintln!("Fatal Error: {err}");
+        std::process::exit(1)
     });
-    intialize(configuration.log);
-    tracing::info!("Korelator successfully initiated");
 
-    // Test connection with simple request
-    let client = QuickwitClient::new(configuration.quickwit_url.as_str());
-    let result = client.search("security-events", "level:HIGH", 20).await?;
-    println!(
-        "{} hits for {}",
-        result.num_hits, result.elapsed_time_micros
-    );
+    intialize(configuration.log);
+    tracing::debug!("Korelator successfully initiated");
 
     // Get pool of rules
     let rules_path = Path::new(&configuration.rules_path);
-    let parsed_rules = rules::parser::parse_rules(rules_path).unwrap_or_default();
+    let parsed_rules = parser::parse_rules(rules_path)
+        .map_err(|e| {
+            tracing::error!("Unforgivable error {e}");
+            std::process::exit(2)
+        })
+        .unwrap();
 
     dbg!(parsed_rules.len());
-
-    Ok(())
 }
