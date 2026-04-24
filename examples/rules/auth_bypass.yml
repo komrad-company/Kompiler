@@ -4,12 +4,24 @@ level: high
 tags:
   - "tag1"
   - "tag2"
-match_type:
-  type: Threshold
-  timeframe_secs: 60
-  aggregate:
-    type: Count
-    threshold: 2
-  group_by:
-    - "user"
-    - "ip"
+
+matcher:
+  !Threshold
+    timeframe_secs: 60
+    aggregate:
+      !Count 10
+    group_by: []
+
+filters:
+  process:
+    - process_name|contains:
+      - !String "shell"
+      - !String "sh"
+  user:
+    - username|contains: !String "admin"
+    - account|startswith: !String "adm"
+    - id: !Integer 1
+
+condition: !Or
+  - !Filter process
+  - !Filter user

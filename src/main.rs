@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use korelator::{load_configuration, rules::parser, telemetry::intialize};
+use korelator::{load_configuration, rules::parse_rules, telemetry::intialize};
 
 #[tokio::main]
 async fn main() {
@@ -14,7 +14,7 @@ async fn main() {
 
     // Get pool of rules
     let rules_path = Path::new(&configuration.rules_path);
-    let parsed_rules = parser::parse_rules(rules_path)
+    let parsed_rules = parse_rules(rules_path)
         .map_err(|e| {
             tracing::error!("Unforgivable error {e}");
             std::process::exit(2)

@@ -1,6 +1,6 @@
 use std::{fs, path::Path};
 
-use crate::rules::parser::parse_rules;
+use crate::rules::parse_rules;
 
 const STATIC_RULES: &str = "./examples/rules";
 #[test]
