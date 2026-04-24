@@ -1,4 +1,6 @@
-# Korelator
+# Kompiler
+
+Some simple module to Kompile (like compile but more Komrad friendly) extended sigma rules format.
 
 ## prerequisites
 

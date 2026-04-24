@@ -1,15 +1,25 @@
-use korelator::{load_configuration, quickwit::QuickwitClient};
+use std::path::Path;
+
+use korelator::{load_configuration, rules::parse_rules, telemetry::intialize};
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let configuration = load_configuration();
+async fn main() {
+    let configuration = load_configuration().unwrap_or_else(|err| {
+        eprintln!("Fatal Error: {err}");
+        std::process::exit(1)
+    });
 
-    let client = QuickwitClient::new(configuration.quickwit_url.as_str());
-    let result = client.search("security-events", "level:HIGH", 20).await?;
-    println!(
-        "{} hits for {}",
-        result.num_hits, result.elapsed_time_micros
-    );
+    intialize(configuration.log);
+    tracing::debug!("Korelator successfully initiated");
 
-    Ok(())
+    // Get pool of rules
+    let rules_path = Path::new(&configuration.rules_path);
+    let parsed_rules = parse_rules(rules_path)
+        .map_err(|e| {
+            tracing::error!("Unforgivable error {e}");
+            std::process::exit(2)
+        })
+        .unwrap();
+
+    dbg!(parsed_rules.len());
 }
