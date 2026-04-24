@@ -1,6 +1,8 @@
 use serde::Deserialize;
 use std::{collections::HashMap, fs, path::Path};
 
+use khronika::error;
+
 use crate::{RuleLevel, errors::UnforgivableErrors};
 
 pub mod condition;
@@ -24,18 +26,18 @@ pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, UnforgivableErrors> {
         .flatten()
         .filter_map(|file| {
             fs::File::open(file.path())
-                .map_err(|e| tracing::error!("{}, {e}", file.path().display()))
+                .map_err(|e| error!("{}, {e}", file.path().display()))
                 .ok()
                 .and_then(|rdr| {
                     serde_yaml::from_reader(rdr)
-                        .map_err(|err| tracing::error!("{}, {err}", file.path().display()))
+                        .map_err(|err| error!("{}, {err}", file.path().display()))
                         .ok()
                         .and_then(|r: Rule| {
                             let filters = r.filters.keys().cloned().collect();
                             r.condition
                                 .validate(&filters)
                                 .map_err(|err| {
-                                    tracing::error!(
+                                    error!(
                                         "Invalid condition on {}: {}",
                                         file.path().display(),
                                         err

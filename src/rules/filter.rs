@@ -1,6 +1,7 @@
+use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 
-use serde::{Deserialize, Deserializer};
+use khronika::error;
 
 #[derive(Debug, Deserialize)]
 pub enum FilterTypes {
@@ -54,9 +55,7 @@ impl<'de> Deserialize<'de> for Filters {
         let filters = raw
             .into_iter()
             .filter_map(|(k, v)| {
-                let (field, condition) = match_filter(&k)
-                    .inspect_err(|err| tracing::error!(err))
-                    .ok()?;
+                let (field, condition) = match_filter(&k).inspect_err(|err| error!(err)).ok()?;
 
                 let value: Vec<Types> = match v {
                     serde_yaml::Value::Sequence(seq) => seq,
@@ -65,7 +64,7 @@ impl<'de> Deserialize<'de> for Filters {
                 .into_iter()
                 .filter_map(|v| {
                     serde_yaml::from_value(v)
-                        .inspect_err(|err| tracing::error!("{}", err))
+                        .inspect_err(|err| error!("{}", err))
                         .ok()
                 })
                 .collect();
@@ -79,7 +78,7 @@ impl<'de> Deserialize<'de> for Filters {
                         .is_none_or(|d| value.iter().all(|v| std::mem::discriminant(v) == d))
                         .then_some(value)
                         .or_else(|| {
-                            tracing::error!("Heterogeneous types values");
+                            error!("Heterogeneous types values");
                             None
                         })?,
                 })

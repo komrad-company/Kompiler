@@ -8,7 +8,6 @@ use crate::errors::UnforgivableErrors;
 pub mod configuration;
 pub mod errors;
 pub mod rules;
-pub mod telemetry;
 
 pub type InternalResult<T> = Result<T, Box<dyn Error>>;
 

@@ -7,7 +7,7 @@ pub enum AggregationType {
 }
 #[derive(Debug, Clone, Deserialize)]
 pub enum Matcher {
-    Single, // Stateless, immediate match
+    Single,
     Threshold {
         timeframe_secs: u32,
         aggregate: AggregationType,
