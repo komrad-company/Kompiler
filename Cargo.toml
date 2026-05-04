@@ -18,4 +18,4 @@ serde_yaml = "0.9.34"
 # Error management
 thiserror = "2.0.18"
 
-khronika = { git = "https://github.com/komrad-company/Khronika.git", tag = "v1.0.0" } # Our job komrad
+khronika = { git = "https://github.com/komrad-company/Khronika.git", tag = "v1.0.1" } # Our job komrad
