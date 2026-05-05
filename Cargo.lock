@@ -87,7 +87,6 @@ version = "0.1.0"
 dependencies = [
  "khronika",
  "serde",
- "serde_json",
  "serde_yaml",
  "thiserror",
 ]
