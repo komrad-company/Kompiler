@@ -7,7 +7,6 @@ pub mod rules;
 
 pub type InternalResult<T> = Result<T, Box<dyn Error>>;
 
-// Global struct
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum RuleLevel {

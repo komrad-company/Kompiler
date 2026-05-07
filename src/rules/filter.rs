@@ -30,7 +30,6 @@ fn match_filter(s: &str) -> Result<(String, FilterTypes), String> {
     }
 }
 
-// Detectable types
 #[derive(Debug, Deserialize)]
 pub enum Types {
     Boolean(bool),
