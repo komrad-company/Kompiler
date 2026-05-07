@@ -1,12 +1,16 @@
-use std::error::Error;
-
 use serde::Deserialize;
 
-pub mod errors;
-pub mod rules;
+pub(crate) mod errors;
+pub(crate) mod rules;
 
-pub type InternalResult<T> = Result<T, Box<dyn Error>>;
+pub use errors::UnforgivableErrors;
+pub use rules::Rule;
+pub use rules::condition::Condition;
+pub use rules::filter::{FieldFilter, FilterTypes, Filters, Types};
+pub use rules::matcher::{AggregationType, Matcher};
+pub use rules::parse_rules;
 
+/// Deserialized from lowercase YAML values (`informational`, `low`, `medium`, `high`, `critical`).
 #[derive(Debug, Clone, PartialEq, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum RuleLevel {

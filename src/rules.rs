@@ -1,14 +1,15 @@
 use serde::Deserialize;
 use std::{collections::HashMap, fs, path::Path};
 
-use khronika::error;
+use khronika::warn;
 
 use crate::{RuleLevel, errors::UnforgivableErrors};
 
-pub mod condition;
-pub mod filter;
-pub mod matcher;
+pub(crate) mod condition;
+pub(crate) mod filter;
+pub(crate) mod matcher;
 
+/// Rules with an invalid `condition` (referencing an undefined filter) are discarded at parse time with a warning.
 #[derive(Debug, Deserialize)]
 pub struct Rule {
     pub id: String,
@@ -21,34 +22,33 @@ pub struct Rule {
     pub condition: condition::Condition,
 }
 
+/// Files that cannot be read, parsed, or validated are skipped with a warning.
+/// Returns [`UnforgivableErrors`] only for I/O failures on the directory itself.
 pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, UnforgivableErrors> {
-    let rules = fs::read_dir(path)?
-        .flatten()
-        .filter_map(|file| {
-            fs::File::open(file.path())
-                .map_err(|e| error!("{}, {e}", file.path().display()))
-                .ok()
-                .and_then(|rdr| {
-                    serde_yaml::from_reader(rdr)
-                        .map_err(|err| error!("{}, {err}", file.path().display()))
-                        .ok()
-                        .and_then(|r: Rule| {
-                            let filters = r.filters.keys().cloned().collect();
-                            r.condition
-                                .validate(&filters)
-                                .map_err(|err| {
-                                    error!(
-                                        "Invalid condition on {}: {}",
-                                        file.path().display(),
-                                        err
-                                    )
-                                })
-                                .ok()
-                                .map(|_| r)
-                        })
-                })
-        })
-        .collect();
+    let mut rules = Vec::new();
+
+    for file in fs::read_dir(path)?.flatten() {
+        let Ok(rdr) =
+            fs::File::open(file.path()).inspect_err(|e| warn!("{}, {e}", file.path().display()))
+        else {
+            continue;
+        };
+
+        let Ok(r) = serde_yaml::from_reader::<_, Rule>(rdr)
+            .map_err(UnforgivableErrors::InvalidFormat)
+            .inspect_err(|e| warn!("{}, {e}", file.path().display()))
+        else {
+            continue;
+        };
+
+        let filters = r.filters.keys().cloned().collect::<Vec<_>>();
+        if let Err(err) = r.condition.validate(&filters) {
+            warn!("Invalid condition on {}: {}", file.path().display(), err);
+            continue;
+        }
+
+        rules.push(r);
+    }
 
     Ok(rules)
 }

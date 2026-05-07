@@ -3,6 +3,10 @@ use std::collections::HashMap;
 
 use khronika::error;
 
+/// Comparison operator applied to a field value.
+///
+/// Encoded in YAML keys as `field|operator` (e.g. `process_name|contains`).
+/// When no operator is specified, [`Exact`](FilterTypes::Exact) is used by default.
 #[derive(Debug, Deserialize)]
 pub enum FilterTypes {
     Exact,
@@ -30,6 +34,10 @@ fn match_filter(s: &str) -> Result<(String, FilterTypes), String> {
     }
 }
 
+/// Typed scalar value used in filter comparisons.
+///
+/// All values within a single [`FieldFilter`] must share the same variant —
+/// heterogeneous lists are rejected at parse time.
 #[derive(Debug, Deserialize)]
 pub enum Types {
     Boolean(bool),
@@ -37,13 +45,19 @@ pub enum Types {
     Integer(i64),
 }
 
+/// A single field comparison: multiple values are evaluated as a logical OR.
 #[derive(Debug, Deserialize)]
 pub struct FieldFilter {
     pub field: String,
     pub condition: FilterTypes,
+    /// All values must share the same [`Types`] variant.
     pub values: Vec<Types>,
 }
 
+/// A named group of [`FieldFilter`]s deserialized from a YAML mapping.
+///
+/// Keys use the `field|operator` syntax. Entries with an unknown operator
+/// or heterogeneous value types are dropped with a warning.
 #[derive(Debug)]
 pub struct Filters(pub Vec<FieldFilter>);
 
