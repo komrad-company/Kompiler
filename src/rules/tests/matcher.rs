@@ -13,7 +13,11 @@ fn single_deserializes_correctly() {
 #[test]
 fn threshold_timeframe_and_group_by_parsed_correctly() {
     match load("threshold_with_groups.yaml") {
-        Matcher::Threshold { timeframe_secs, group_by, .. } => {
+        Matcher::Threshold {
+            timeframe_secs,
+            group_by,
+            ..
+        } => {
             assert_eq!(timeframe_secs, 60);
             assert_eq!(group_by, vec!["user_id"]);
         }
@@ -24,7 +28,10 @@ fn threshold_timeframe_and_group_by_parsed_correctly() {
 #[test]
 fn threshold_count_value_parsed_correctly() {
     match load("threshold_with_groups.yaml") {
-        Matcher::Threshold { aggregate: AggregationType::Count(n), .. } => assert_eq!(n, 10),
+        Matcher::Threshold {
+            aggregate: AggregationType::Count(n),
+            ..
+        } => assert_eq!(n, 10),
         _ => panic!("Expected Threshold with Count"),
     }
 }

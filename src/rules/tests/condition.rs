@@ -6,12 +6,20 @@ fn filter_names(names: &[&str]) -> Vec<String> {
 
 #[test]
 fn filter_valid_returns_ok() {
-    assert!(Condition::Filter("a".into()).validate(&filter_names(&["a"])).is_ok());
+    assert!(
+        Condition::Filter("a".into())
+            .validate(&filter_names(&["a"]))
+            .is_ok()
+    );
 }
 
 #[test]
 fn filter_undefined_returns_err() {
-    assert!(Condition::Filter("x".into()).validate(&filter_names(&["a"])).is_err());
+    assert!(
+        Condition::Filter("x".into())
+            .validate(&filter_names(&["a"]))
+            .is_err()
+    );
 }
 
 #[test]
