@@ -1,0 +1,11 @@
+id: "rule-003"
+title: "Undefined Filter in Condition"
+level: medium
+
+matcher: Single
+
+filters:
+  process:
+    - process_name|exact: !String "bash"
+
+condition: !Filter nonexistent

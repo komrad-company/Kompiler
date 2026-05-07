@@ -1,0 +1,11 @@
+id: "rule-001"
+title: "Valid Rule"
+level: high
+
+matcher: Single
+
+filters:
+  process:
+    - process_name|contains: !String "shell"
+
+condition: !Filter process

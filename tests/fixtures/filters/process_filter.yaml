@@ -1,0 +1,11 @@
+hostname: !String "server-01"
+proc_name|contains:
+  - !String "shell"
+  - !String "bash"
+cmd_line|startswith: !String "/usr/bin"
+binary|endswith: !String ".exe"
+username|exact: !String "root"
+pid|gt: !Integer 1000
+min_pid|gte: !Integer 1001
+nice_val|lt: !Integer 0
+max_nice|lte: !Integer -1

@@ -1,0 +1,4 @@
+!Threshold
+  timeframe_secs: 30
+  aggregate: !Count 5
+  group_by: []

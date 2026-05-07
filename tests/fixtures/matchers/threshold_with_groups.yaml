@@ -1,0 +1,5 @@
+!Threshold
+  timeframe_secs: 60
+  aggregate: !Count 10
+  group_by:
+    - user_id
