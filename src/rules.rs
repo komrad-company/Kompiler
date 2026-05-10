@@ -3,7 +3,7 @@ use std::{collections::HashMap, fs, path::Path};
 
 use khronika::warn;
 
-use crate::{RuleLevel, errors::UnforgivableErrors};
+use crate::{RuleLevel, errors::Error};
 
 pub(crate) mod condition;
 pub(crate) mod filter;
@@ -23,8 +23,8 @@ pub struct Rule {
 }
 
 /// Files that cannot be read, parsed, or validated are skipped with a warning.
-/// Returns [`UnforgivableErrors`] only for I/O failures on the directory itself.
-pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, UnforgivableErrors> {
+/// Returns [`Error`] only for I/O failures on the directory itself.
+pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, Error> {
     let mut rules = Vec::new();
 
     for file in fs::read_dir(path)?.flatten() {
@@ -35,7 +35,7 @@ pub fn parse_rules(path: &Path) -> Result<Vec<Rule>, UnforgivableErrors> {
         };
 
         let Ok(r) = serde_yaml::from_reader::<_, Rule>(rdr)
-            .map_err(UnforgivableErrors::InvalidFormat)
+            .map_err(Error::InvalidFormat)
             .inspect_err(|e| warn!("{}, {e}", file.path().display()))
         else {
             continue;

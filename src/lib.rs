@@ -3,7 +3,7 @@ use serde::Deserialize;
 pub(crate) mod errors;
 pub(crate) mod rules;
 
-pub use errors::UnforgivableErrors;
+pub use errors::Error;
 pub use rules::Rule;
 pub use rules::condition::Condition;
 pub use rules::filter::{FieldFilter, FilterTypes, Filters, Types};
