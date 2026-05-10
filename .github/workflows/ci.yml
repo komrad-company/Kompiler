@@ -10,9 +10,26 @@ on:
 jobs:
   security:
     uses: komrad-company/Kontinuous-integration/.github/workflows/security-pipeline.yml@main
+
+  rust-security:
+    uses: komrad-company/Kontinuous-integration/.github/workflows/rust-security-pipeline.yml@main
+
   pipeline:
     permissions:
       contents: write
-    needs: security
+    needs:
+      - security
+      - rust-security
     uses: komrad-company/Kontinuous-integration/.github/workflows/rust-pipeline.yml@main
+
+  notify:
+    needs:
+      - security
+      - pipeline
+    if: ${{ always() }}
+    uses: komrad-company/Kontinuous-integration/.github/workflows/notify-pipeline.yml@main
+    with:
+      status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 

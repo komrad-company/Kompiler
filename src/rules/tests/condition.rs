@@ -1,4 +1,4 @@
-se crate::rules::condition::Condition;
+use crate::rules::condition::Condition;
 
 fn filter_names(names: &[&str]) -> Vec<String> {
     names.iter().map(|s| s.to_string()).collect()
