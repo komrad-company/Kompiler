@@ -1,3 +1,5 @@
+#![forbid(unsafe_code)]
+
 use serde::Deserialize;
 
 pub(crate) mod errors;
