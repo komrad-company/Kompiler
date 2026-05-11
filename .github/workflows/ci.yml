@@ -12,7 +12,7 @@ jobs:
     uses: komrad-company/Kontinuous-integration/.github/workflows/security-pipeline.yml@main
 
   rust-security:
-    uses: komrad-company/Kontinuous-integration/.github/workflows/rust-security-pipeline.yml@main
+    uses: komrad-company/Kontinuous-integration/.github/workflows/rust-security-pipeline.yml@develop
 
   pipeline:
     permissions:
@@ -27,7 +27,7 @@ jobs:
       - security
       - pipeline
     if: ${{ always() }}
-    uses: komrad-company/Kontinuous-integration/.github/workflows/notify-pipeline.yml@main
+    uses: komrad-company/Kontinuous-integration/.github/workflows/notify-pipeline.yml@develop
     with:
       status: ${{ contains(needs.*.result, 'failure') && 'failure' || contains(needs.*.result, 'cancelled') && 'cancelled' || 'success' }}
     secrets:
