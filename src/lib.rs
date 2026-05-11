@@ -1,7 +1,7 @@
 #![forbid(unsafe_code)]
 
-use std::fmt;
 use serde::Deserialize;
+use std::fmt;
 
 pub(crate) mod errors;
 pub(crate) mod rules;
