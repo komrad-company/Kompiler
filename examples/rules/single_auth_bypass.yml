@@ -1,0 +1,21 @@
+id: "rule-002"
+title: "Suspicious Authentication"
+level: high
+tags:
+  - "auth"
+
+matcher: !Single
+
+filters:
+  process:
+    - process_name|contains:
+      - !String "shell"
+      - !String "sh"
+  user:
+    - username|contains: !String "admin"
+    - account|startswith: !String "adm"
+    - id: !Integer 1
+
+condition: !Or
+  - !Filter process
+  - !Filter user
