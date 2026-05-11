@@ -72,7 +72,7 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 [[package]]
 name = "khronika"
 version = "0.1.0"
-source = "git+https://github.com/komrad-company/Khronika.git?tag=v1.0.1#70d9eb939c08f055c14e6d75500c4b6f111a209e"
+source = "git+https://github.com/komrad-company/Khronika.git?tag=v1.0.2#3e349cfca6704b9974bfc0241dd0d81b0022c43c"
 dependencies = [
  "serde",
  "serde_json",

@@ -1,4 +1,7 @@
+#![forbid(unsafe_code)]
+
 use serde::Deserialize;
+use std::fmt;
 
 pub(crate) mod errors;
 pub(crate) mod rules;
@@ -19,4 +22,17 @@ pub enum RuleLevel {
     Medium,
     High,
     Critical,
+}
+
+impl fmt::Display for RuleLevel {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let level = match self {
+            RuleLevel::Informational => "informational",
+            RuleLevel::Low => "low",
+            RuleLevel::Medium => "medium",
+            RuleLevel::High => "high",
+            RuleLevel::Critical => "critical",
+        };
+        formatter.write_str(level)
+    }
 }
