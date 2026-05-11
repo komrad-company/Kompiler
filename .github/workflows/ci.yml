@@ -24,7 +24,6 @@ jobs:
 
   notify:
     needs:
-      - security
       - pipeline
     if: ${{ always() }}
     uses: komrad-company/Kontinuous-integration/.github/workflows/notify-pipeline.yml@develop
