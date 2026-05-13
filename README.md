@@ -148,10 +148,10 @@ condition: !Or
 The collective exposes one function. One is sufficient.
 
 ```rust
-use kompiler::{parse_rules, Rule, UnforgivableErrors};
+use kompiler::{parse_rules, Rule, Error};
 use std::path::Path;
 
-fn main() -> Result<(), UnforgivableErrors> {
+fn main() -> Result<(), Error> {
     let rules: Vec<Rule> = parse_rules(Path::new("./rules"))?;
     Ok(())
 }
@@ -172,7 +172,7 @@ fn main() -> Result<(), UnforgivableErrors> {
 | `FieldFilter` | Single field comparison |
 | `FilterTypes` | Comparison operator |
 | `Types` | Typed value (`Boolean`, `String`, `Integer`) |
-| `UnforgivableErrors` | Fatal errors — the caller must handle them or face consequences |
+| `Error` | Fatal errors — the caller must handle them or face consequences |
 
 ---
 
