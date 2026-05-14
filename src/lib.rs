@@ -1,6 +1,6 @@
 #![forbid(unsafe_code)]
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::fmt;
 
 pub(crate) mod errors;
@@ -14,7 +14,7 @@ pub use rules::matcher::{AggregationType, Matcher};
 pub use rules::parse_rules;
 
 /// Deserialized from lowercase YAML values (`informational`, `low`, `medium`, `high`, `critical`).
-#[derive(Debug, Clone, PartialEq, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum RuleLevel {
     Informational,
