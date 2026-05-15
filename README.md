@@ -1,5 +1,7 @@
 # Kompiler
 
+![CI](https://github.com/komrad-company/Kompiler/actions/workflows/ci.yml/badge.svg) ![Release](https://img.shields.io/github/v/release/komrad-company/Kompiler) ![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)
+
 > *"A rule not parsed is a threat not defeated."*
 > — Komrad Engineering Collective, May 2026
 
